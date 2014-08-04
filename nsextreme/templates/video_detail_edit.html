@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% load bootstrap_toolkit %}
+
+{% block title %}{{video.title}}{% endblock %}
+{% block head_additional %}
+<script src="{{ MEDIA_URL }}js/bootbox/bootbox.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<a href="{% url 'private_video' videoid=video.id %}">back to video page</a>
+<h1>Change your video information.</h1>
+<input class="btn btn-custom-2 btn-delete" type="submit" value ="Delete this video">
+<form class="" id="delete_form" method="post" action="{% url 'video_delete' videoid=video.id %}">
+{% csrf_token %}
+</form>
+<form class="" id="video_form" method="post" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|as_bootstrap }}
+    <input class="btn btn-custom-2" type="submit" value ="Save">
+</form>
+<script src="{{ MEDIA_URL }}js/video_edit_page.js"></script>
+{% endblock %}
+
+

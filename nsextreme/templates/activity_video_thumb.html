@@ -1,0 +1,49 @@
+<div class="c-s-6">
+    <div class="widget-video" id="video_{{ video.id }}" data-video-id="{{ video.id }}">
+        <h4><a href="{{ video.get_private_url }}">{{ video.title }}</a>
+            {% if video.shared %}
+                <a class="share-video pull-right btn"><i class="icon-stop" title="Share Video"></i></a>
+            {% else %}
+                <a class="share-video pull-right btn"><i class="icon-share" title="Share Video"></i></a>
+            {% endif %}
+        </h4>
+        <p>{{ video.description }}</p>
+        <div>
+            <a class="btn btn-link btn-small">{{ video.user.display_name }}</a>
+            <a class="btn btn-link btn-small">{{ video.category }}</a>
+            <a class="btn btn-link btn-small pull-right"><i class="e-icon-thumbs-up"></i>{{ video.like }}</a>
+            <a class="btn btn-link btn-small pull-right"><i class="e-icon-thumbs-up2"></i>{{ video.unlike }}</a>
+            <a class="btn btn-link btn-small pull-right"><i class="e-icon-star3"></i>{{ video.stared }}</a>
+        </div>
+        <div class="video-area m-b-5">
+            <!-- video area -->
+            <img src="{{ MEDIA_URL }}{{ video.thumbnail }}" height="150px">
+        </div>
+        <div class="social clearfix m-b-5">
+            {% if not user.is_authenticated %}
+            <a href="{% url 'auth_login' %}" class="btn btn-warning btn-small pull-right">JOIN</a>
+            {% endif %}
+            {% include "snippets/share.html" with page_url=video.get_absolute_url page_title=video.title %}
+        </div>
+        <div class="comment-form clearfix row-fluid m-b-5">
+            {% csrf_token %}
+            <input type="text" placeholder="Comment or message" class="span10 m-b-0 txt-create-comment">
+            <input type="button" class="btn btn-primary btn-small span2 btn-create-comment" data-video-id="{{ video.id }}" value="+">
+        </div>
+        <div class="clearfix"><a class="btn btn-link btn-small btn-toggle-comment pull-right" href="#v_comment_area_{{ video.id }}" data-toggle="collapse" data-count="{{ video.recentComments.count }}">Show Comments({{ video.recentComments.count }})</a></div>
+        <div id="v_comment_area_{{ video.id }}" class="thumb-comment-tab tabbable {% if not video.recentComments %}hide{% endif %} collapse" data-count="{{ video.recentComments.count }}">
+            <ul class="nav nav-tabs m-b-0" id="myTab">
+                <li class="active"><a href="#recent_comments_{{ video.id }}" data-toggle="tab">Recent Comments</a></li>
+                <li><a href="#top_comments_{{ video.id }}" data-toggle="tab">Top Comments</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="recent_comments_{{ video.id }}">
+                    {% include "comment_list.html" with comments=video.recentComments %}
+                </div>
+                <div class="tab-pane" id="top_comments_{{ video.id }}">
+                    {% include "comment_list.html" with comments=video.topComments %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

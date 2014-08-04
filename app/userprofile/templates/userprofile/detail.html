@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block sidebar %}
+<script>
+    $(function() {
+        $("#id_profile").click(function() {
+            //alert($('#id_personal').is(':checked'));
+            if ($('#id_profile').is(':checked')) {
+                $('tr.tr_profile').show();
+            } else {
+                $('tr.tr_profile').hide();
+            } 
+            // $('tr.tr_personal').hide();
+         });
+        $("#id_group").click(function() {
+            if ($('#id_group').is(':checked')) {
+                $('tr.tr_group').show();
+            } else {
+                $('tr.tr_group').hide();
+            } 
+         });
+        $("#id_course").click(function() {
+            if ($('#id_course').is(':checked')) {
+                $('tr.tr_course').show();
+            } else {
+                $('tr.tr_course').hide();
+            } 
+         });
+    });
+</script>
+<div class="friends">
+    <h3>Friends</h3>
+    <ul class="nav nav-list">
+    {% for f in friends %}
+    <li><a href="{{ f.get_absolute_url }}">{{ f.display_name }}</a></li>
+    {% endfor %}
+    </ul>
+</div>
+    
+{% endblock %}
+
+
+{% block content %}
+<div class="user_info image_thumb">
+    <h3><img src="{{ user_profile.profile.get_small_picture }}" alt="{{ user_profile.display_name }}"> {{ user_profile.display_name }}</h3>
+</div>
+
+<div class="tabbable" style="margin: 20px 0">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#user-bio" data-toggle="tab" >About</a></li>
+        <li><a href="#user-timeline" data-toggle="tab">Timeline</a></li>
+        <li><a href="#user-courses" data-toggle="tab">Courses</a></li>
+        {% if request.user == user_profile %}<li><a href="#user-events" data-toggle="tab">Events</a></li>{% endif %}
+        {% if request.user == user_profile %}<li><a href="#user-calendar" data-toggle="tab">Calendar</a></li>{% endif %}
+    </ul>
+
+    <div class="tab-content">
+        <div id="user-timeline" class="tab-pane">
+            <div class="row">
+                <div class="span6">
+                    {% for timeline in timelines %}
+                    <div class="margin-bottom: 20px;">
+
+                    </div>
+
+                    {% endfor %}
+
+                    {% if timelines.paginator.num_pages > 1 %}
+                    <div class="pagination pagination-small pagination-left">
+                        <ul>
+                            {% if timelines.has_previous %}
+                            <li><a href="?page={{ timelines.previous_page_number }}">Newer</a></li>
+                            {% else %}
+                            <li class="disabled"><a href="?page={{ timelines.number }}">Newer</a></li>
+                            {% endif %}
+                            {% for pagenum in timelines.paginator.page_range %}
+                            <li {% if pagenum == timelines.number %}class="active"{% endif %}><a href="?page={{ pagenum }}">{{ pagenum }}</a></li>
+                            {% endfor %}
+                            {% if timelines.has_next %}
+                            <li><a href="?page={{ timelines.next_page_number }}">Older</a></li>
+                            {% else %}
+                            <li class="disabled"><a href="?page={{ timelines.number }}">Older</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="span3">
+                    {% if user_profile == request.user %}
+                    <div class="tabbable" style="background: #f7f7f7; padding: 10px;border-radius: 8px; margin: 20px 0;">
+                        <h5>share your status:</h5>
+
+                        <ul class="nav nav-pills">
+                          <li><a href="#upload_text_wrapper" data-toggle="tab">Text</a></li>
+                          <li><a href="#upload_image_wrapper" data-toggle="tab">Image</a></li>
+                          <li><a href="#upload_youtube_wrapper" data-toggle="tab">Youtube</a></li>
+                          <li><a href="#upload_file_wrapper" data-toggle="tab">File</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div id="upload_text_wrapper" class="tab-pane">
+                                <form action="{% url 'userprofile:upload_text' %}" method="POST">{% csrf_token %}
+                                    {{ text_form.as_p }}
+                                    <button type="submit" class="btn btn-primary">Share</button>
+                                </form>
+                            </div>
+                            
+                            <div id="upload_image_wrapper" class="tab-pane">
+                                <form action="{% url 'userprofile:upload_picture' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+                                    {{ image_form.as_p }}
+                                    <button type="submit" class="btn btn-primary">Upload image</button>
+                                </form>
+                            </div>
+                            
+                            <div id="upload_youtube_wrapper" class="tab-pane">
+                                <form action="{% url 'userprofile:upload_youtube' %}" method="POST">{% csrf_token %}
+                                    {{ youtube_form.as_p }}
+                                    <button type="submit" class="btn btn-primary">Share YouTube video</button>
+                                </form>
+                            </div>
+                            
+                            <div id="upload_file_wrapper" class="tab-pane">
+                                <form action="{% url 'userprofile:upload_file' %}" method="POST" enctype="multipart/form-data">{% csrf_token %}
+                                    {{ file_form.as_p }}
+                                    <button type="submit" class="btn btn-primary">Upload file</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div id="user-bio" class="active tab-pane">
+            <div class="row-fluid">
+                <h3 class="span4">About Me</h3> 
+                {% if request.user == user_profile %}
+                <h4 class="offset4">
+                    <a href="{% url 'userprofile:edit' username=user_profile.username %}"><i class="icon-pencil"></i> Edit</a></h4>
+                {% endif %}
+            </div>
+            <div class="span8"><p>{{ user_profile.profile.about_me }}</p></div>
+            <table class="table table-hover span8">
+                <tr>
+                    <td><i class="icon-user"></i> Username</td>
+                    <td>{{ user_profile.username}}</td>
+                </tr>
+                <tr>
+                    <td><i class="icon-certificate"></i> Real name</td>
+                    <td>{{ user_profile.first_name }} {{ user_profile.last_name }}</td>
+                </tr>
+                <tr>
+                    <td><i class="icon-gift"></i> Birth date</td>
+                    <td>{{ user_profile.profile.birth_date|date }}</td>
+                </tr>
+                {% if user_profile.profile.relationsheep %}
+                <tr>
+                    <td><i class="icon-heart"></i> Relationsheep</td>
+                    <td>{{ user_profile.profile.get_relationsheep_display }}</td>
+                </tr>
+                {% endif %}
+                
+                <tr>
+                    <td><i class="icon-home"></i> Home town</td>
+                    <td>{{ user_profile.profile.location }}</td>
+                </tr>
+
+
+                <tr>
+                    <td><i class="icon-headphones"></i> Phone</td>
+                    <td>{{ user_profile.profile.phone }}</td>
+                </tr>
+                <tr>
+                    <td><i class="icon-envelope"></i> Email</td>
+                    <td> {{ user_profile.email }}</td>
+                </tr>
+            </table>
+
+            <script>
+                $(document).ready(function(){
+                    $("#add_interest").click(function() {
+
+                    });
+
+                    $("#add_hobby").click(function() {
+
+                    });
+
+                });
+            </script>
+
+
+            <h3 class="span8 row">Interests:</h3>
+            <div class="row span8">
+                <div id="interests" class="">
+
+                </div>
+                <div class='add_btn ' style="margin-top:0.5em;">
+                    <span class="label label-warning" id="add_interest">
+                            Add new interest <b>+</b>
+                    </span>
+                </div>
+            </div>
+
+            <h3 class="span8 row">Hobbies:</h3>
+            <div class="row span8">
+                <div id="hobbies" class="">
+                    {% for i in user_profile.profile.hobbies.all %}
+                    <span class="label label-info">{{ i.title }}</span> &nbsp;
+                    {% empty %}
+                    <h3 class="empty">No hobbies added yet!</h3>
+                    {% endfor %}
+                </div>
+                <div class='add_btn ' style="margin-top: 0.5em;">
+                    <span class="label label-warning" id="add_hobby">
+                            Add new hobby <b>+</b>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div id="user-courses" class="tab-pane">
+            <table class="table table-hover">
+            <h3>Registered Courses</h3>
+            <thead>
+                <tr>
+                    <th colspan="2">Course name</th>
+                    <th>Students</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in user_profile.active_courses %}
+                <tr>
+                    <td colspan="2">
+                        <p><a href="{{ course.get_absolute_url }}">{{ course.name }}</a> <small>{{ course.total_students }} student(s)</small></p>
+                    </td>
+                    <td>{% for member in course.coursemembership_set.all %}
+                        <p><a href="{{ member.user.get_absolute_url }}">
+                            <p>{{member.user.display_name}}</p>
+                        {% endfor %}
+                    </td>
+                </tr>
+            {% empty %}
+            <tr>
+            <p>{{ user_profile.display_name }} is not registered to any courses</p>
+            </tr>
+            {% endfor %}
+            </tbody>
+            </table>
+
+        </div>
+
+        {% if request.user == user_profile %}
+        <div id="user-events" class="tab-pane">
+            <p><i class="icon icon-plus"></i><a href="{% url 'userprofile:create_events' %}">Create New Event</a></p>
+            <table class="table table-hover">
+            <h3>Events</h3>
+            <p><label for="id_same_school">Same School: </label>
+                <input type="checkbox" name="profile" id="id_profile" value="y" checked> Profile
+                <input type="checkbox" name="group" id="id_group" value="y" checked> Group
+                <input type="checkbox" name="course" id="id_course" value="y" checked> Course
+            </p>
+            <tbody>
+                {% for event in events %}
+                <tr class="tr_{{event.content_type}}">
+                    <td>{{ event.title }} {% if event.content_object != user_profile.profile %}<small>(on <a href="{{ event.content_object.get_absolute_url }}">{{ event.content_object }}</a>)</small>{% endif %}</td>
+                    <td>{{ event.content }}-- {{event.content_type}}</td>
+                    <td>{{ event.event_date }}</td>
+                    <td>{% if event.created_by.profile.small_picture %}<a href="{{ event.created_by.get_absolute_url }}"><img src="{{ event.created_by.profile.small_picture.url }}" alt=""></a>{% endif %} <a href="{{ event.created_by.get_absolute_url }}">{{ event.created_by.display_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+        </div>
+        {% endif %}
+
+        {% if request.user == user_profile %}
+        <div id="user-calendar" class="tab-pane">
+            <div id="calendar"></div>
+            <div style="margin: 20px 0">
+                <p><span class="label">Personal events</span> <span class="label label-warning">Group events</span> <span class="label label-info">Course events</span></p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extrajs %}
+<script type="text/javascript">
+
+</script>
+{% endblock %}

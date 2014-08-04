@@ -1,0 +1,42 @@
+<a href="http://www.facebook.com/sharer.php?u={{ SITE_URL }}{{ page_url }}" target="_blank">
+    <img src="{{ MEDIA_URL }}images/share-button-facebook.gif" alt="Facebook" >
+</a>
+<a href="http://twitter.com/share?url={{ SITE_URL }}{{ page_url }}&text=NS Extreme - {{ page_title }}" target="_blank">
+    <img src="{{ MEDIA_URL }}images/share-button-twitter.gif" alt="Twitter" >
+</a>
+<a href="https://plus.google.com/share?url={{ SITE_URL }}{{ page_url }}" target="_blank">
+    <img src="{{ MEDIA_URL }}images/share-button-google.gif" alt="Google" >
+</a>
+
+{% comment %}
+<a href="https://twitter.com/share" class="twitter-share-button" data-url="{{ SITE_URL }}{{ video.get_absolute_url }}" data-text="NS Extreme - {{ video.title }}" data-count="none"></a><!-- remove data count -->
+<div class="g-plus" data-action="share" data-annotation="none" data-href="{{ SITE_URL }}{{ video.get_absolute_url }}"></div><!--data-annotation="bubble"-->
+<div class="fb-share-button" data-href="{{ SITE_URL }}{{ video.get_absolute_url }}" data-type="button_count"></div><!-- data-type="button_count" -->
+
+<script>
+    /*
+// twitter code
+
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+
+// facebook code
+
+(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));
+
+// Google Code
+
+  (function() {
+    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+    po.src = 'https://apis.google.com/js/platform.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+  })();
+  <div id="fb-root"></div>
+   */
+</script>
+{% endcomment %}

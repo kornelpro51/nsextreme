@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% load bootstrap_toolkit %}
+
+{% block title %}Explore{% endblock %}
+{% block head_additional %}
+    <script src="{{ MEDIA_URL }}js/masonry/masonry.pkgd.min.js"></script>
+    <script src="{{ MEDIA_URL }}js/bootbox/bootbox.min.js"></script>
+    <script src="{{ MEDIA_URL }}js/jscroll/jquery.jscroll.js"></script>
+{% endblock %}
+{% block content %}
+<script type="text/javascript">
+    var MOREVIDEOSEXIST = true;
+    {% if next_page == None %}
+    MOREVIDEOSEXIST = false;
+    {% endif %}
+</script>
+<div class="row-fluid">
+    <div class="span2 categories">
+        <div class="widget box-category">
+            <ul>
+                <li class="{% if current_category == None %}active{% endif %}"><a href="{% url 'activity' %}">All</a></li>
+            {% for category in category_list %}
+                <li id="cl_{{ category.id }}" class="{% if current_category == category.id %}active{% endif %}"><a href="{% url 'activity_c' categoryid=category.id %}">{{ category.title }}</a></li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="span8 widget">
+        <div class="row-fluid video-thumb-container">
+        {% for video in video_list %}
+            {% include "activity_video_thumb.html" with video=video shared=False %}
+            {% if forloop.counter|divisibleby:2 %}
+            <div class="clearfix"></div>
+            {% endif %}
+        {% endfor %}
+        {% if next_page != None %}
+            <a class="next_link" href="{{ next_page }}">next page</a>
+        {% endif %}
+        </div>
+    </div>
+    <div class="span2">
+        <div class="row-fluid widget box-category">
+            <ul>
+                <li class="{% if current_category == 'favorites' %}active{% endif %}"><a href="{% url 'favorites' %}">Favorites</a></li>
+                <li class="{% if current_category == 'popular' %}active{% endif %}"><a href="{% url 'popular' %}">Popular</a></li>
+                <li class="{% if current_category == 'toppicks' %}active{% endif %}"><a href="{% url 'toppicks' %}">Top picks</a></li>
+                <li class="{% if current_category == 'recommended' %}active{% endif %}"><a href="{% url 'recommended' %}">Recommended</a></li>
+            </ul>
+        </div>
+        <div class="row-fluid widget">
+            <div class="banner-ad">
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="{{ MEDIA_URL }}js/explore_page.js"></script>
+{% endblock %}

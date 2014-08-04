@@ -1,0 +1,9 @@
+{% for video in video_list %}
+    {% include "explore_video_thumb.html" with video=video shared=True %}
+    {% if forloop.counter|divisibleby:2 %}
+    <div class="clearfix"></div>
+    {% endif %}
+{% endfor %}
+{% if next_page != None %}
+<a class="next_link" href="{{ next_page }}">next page</a>
+{% endif %}

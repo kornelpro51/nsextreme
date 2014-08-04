@@ -1,0 +1,22 @@
+{% extends "registration/base.html" %}
+
+{% block title %}Resend Activation Key{% endblock %}
+{% load bootstrap_toolkit %}
+
+{% block content %}
+    <h1>Resend Activation Key</h1>
+    <p>Please enter the email address you used when you signed up and we'll resend your activation key.</p>
+    <form method="post" action="{% url 'nsextreme_reg_reactivate' %}" class="form-vertical">
+        {% csrf_token %}
+        {% if form.email.errors %}
+        <p class="errors">{{ form.email.errors.as_text }}</p>
+        {% endif %}
+        {{ form.email }}
+        <div class="text-center">
+            <button type="submit" class="btn btn-custom-2">Send</button>
+        </div>
+    </form>
+    <div class="errors">
+        {{ msg }}
+    </div>
+{% endblock %}

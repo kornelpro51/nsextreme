@@ -1,0 +1,39 @@
+{% extends "registration/base.html" %}
+
+{% load bootstrap_toolkit %}
+
+{% block title %}Log in{% endblock %}
+
+{% block head_additional %}
+    <link href="{{ STATIC_URL }}django_facebook/css/facebook.css"
+{% endblock %}
+
+{% block content %}
+
+{% if form.errors %}
+<p class="error">Please correct the errors below:</p>
+{% endif %}
+{% include 'django_facebook/_facebook_js.html' %}
+<h1>Login</h1>
+<form action="{% url 'facebook_connect' %}?facebook_login=1" method="post">
+    <input type="hidden" value="{{ request.path }}" name="next" />
+    <input type="hidden" value="{{ request.path }}" name="register_next" />
+    <input type="hidden" value="{{ request.path }}" name="error_next" />
+    {% csrf_token %}
+    <input onclick="F.connect(this.parentNode); return false;" type="image" src="{{ STATIC_URL }}django_facebook/images/facebook_login.png" />
+</form>
+<form method="post" action="?next=/activity/" class="form-vertical"><!-- action="?next={ next|default:"/" }" -->
+	{% csrf_token %}
+	{{ form|as_bootstrap:"vertical" }}
+    <!--<label class="checkbox"><input type="checkbox">Remember me</label>-->
+	<div class="text-center">
+    	<button type="submit" class="btn btn-custom-2">Login</button>
+    </div>
+</form>
+{% endblock %}
+
+{% block content-related %}
+<p class="text-center">If you don't have an account, you can <a href="/accounts/register/">sign
+up</a> for one.</p>
+<p class="text-center"><a href="/accounts/password/reset">Forgot your password?</a></p>
+{% endblock %}

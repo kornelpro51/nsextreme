@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% load groups_tags %}
+
+{% block content %}
+<h2>{{ user.display_name}}'s groups</h2>
+
+<ul>
+    {% for membership in memberships %}
+    <li>
+        <a href="{% if user|is_manager_of:membership.group %}{% url 'groups:manage' membership.group.pk %}{% else %}{{ membership.group.get_absolute_url }}{% endif %}">{{ membership.group.name }}</a>
+        {% if membership.group.created_by == user %}(owner){% endif %}
+        {% if membership.status == 3 %} <a class="btn btn-primary" href="{% url 'groups:join' membership.group.pk %}">Accept invitation</a> <a class="btn" href="{% url 'groups:leave' membership.group.pk %}">Reject invitation</a>{% endif %}
+        {% if membership.status == 1 and not user|is_manager_of:membership.group %}<a class="btn" href="{% url 'groups:leave' membership.group.pk %}">Leave group</a>{% endif %}
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

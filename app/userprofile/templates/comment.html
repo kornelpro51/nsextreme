@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Detail Status</h1>
+<hr>
+<div style="color:blue; margin-top:10px;">{{ status.title}}</div>
+<hr>
+<form action="" method="post">
+{% csrf_token %}
+{{form.as_p}}
+<input type="submit" value="Save" />
+</form>
+<hr>
+{% for comment in comments %}
+    <p>{{comment.comment}} -- {{comment.created_by}}</p>
+{% endfor %}
+{% endblock %}

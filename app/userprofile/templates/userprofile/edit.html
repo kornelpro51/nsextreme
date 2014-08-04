@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% load bootstrap_toolkit %}
+
+{% block title %}NS Extreme.com{% endblock %}
+{% block head_additional %}
+    <!--<link href="{{ MEDIA_URL }}js/nv.d3.css" rel="stylesheet">-->
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/jquery-ui/jquery-ui-1.10.4.custom.min.css">
+
+    <script src="{{ MEDIA_URL }}js/jquery-ui/jquery-ui-1.10.4.custom.min.js"></script>
+{% endblock %}
+{% block content %}
+    <div class="row-fluid">
+    {% if show_welcome %}
+<div class="span8">
+    <div class="widget">
+        <h1>Welcome to NS Extreme</h1>
+        <ul>
+            <li class="clearfix">
+                <h5>1. Grab a case for your phone</h5>
+                <div>
+                    <div class="text-center">Our favorites...</div>
+                    <div>
+                        <div class="pull-left image_s">
+                            <img src="{{ MEDIA_URL }}images/optrix_s.jpg">
+                            <div class="text-center"><a href="#">Optrix</a></div>
+                        </div>
+                        <div class="pull-left image_s">
+                            <img src="{{ MEDIA_URL }}images/hitcase_s.jpg">
+                            <div class="text-center"><a href="#">Hitcase</a></div>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="clearfix">
+                <h5>2. Download our free iPhone app</h5>
+                <div>
+                    <div class="pull-left image_s">
+                        <img src="{{ MEDIA_URL }}images/iphone_s.jpg">
+                    </div>
+                    <div class="pull-left image_s">
+                        <img src="{{ MEDIA_URL }}images/appstore_s.jpg">
+                    </div>
+                </div>
+            </li>
+            <li class="clearfix">
+                <h5>3. Record your first activity</h5>
+                <p>Use the NS Extreme iPhone app to record and upload <br>your activities to NS Extreme.com and start tracking <br>your progress and achievements.</p>
+            </li>
+        </ul>
+    </div>
+</div>
+    {% else %}
+        <div class="span2"></div>
+    {% endif %}
+    {% if not show_welcome %}
+<div class="span8">
+    {% else %}
+<div class="span4">
+    {% endif %}
+    {% comment %}
+    <div class="row-fluid widget">
+        <p>Invite Your Friends to NS Extreme</p>
+        <div class="text-center"><a href="#" class="btn btn-custom-1">Invite Friends</a></div>
+    </div>
+    {% endcomment %}
+    <div class="row-fluid widget fullcontrol">
+        <h4>Complete your profile</h4>
+        <form class="signup" id="signup_form" method="post" action="" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form|as_bootstrap }}
+            <input class="btn btn-custom-2" type="submit" value ="Save">
+        </form>
+        <a href="{% url 'userprofile_detail' username=user.username %}">View my public profile</a>
+    </div>
+</div>
+    </div>
+    {% if not show_welcome %}
+        <div class="span2"></div>
+    {% endif %}
+    <script>
+    $(function() {
+    $( "#id_birth_date" ).datepicker();
+  });
+    </script>
+{% endblock %}

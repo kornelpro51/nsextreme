@@ -1,0 +1,23 @@
+Django==1.5
+#PIL==1.1.7
+Pillow
+South
+django-bootstrap-toolkit==2.5.8
+-e git+https://github.com/hexsprite/django-hunger.git@c2a724f41e11a97c7a68e6bd19edaf6c056c13bf#egg=django_hunger-dev
+django-registration==1.0
+-e git://github.com/bitmazk/django-registration-email#egg=registration_email
+qtfaststart==1.5
+psycopg2
+django-facebook==5.3.1
+
+# testing tools
+mock==1.0b1
+-e git+https://github.com/hexsprite/mock-django.git@a3e235dde383830d350d508cb827fb34d30848a3#egg=mock_django-dev
+django-debug-toolbar==0.9.4
+-e git+https://github.com/jbalogh/django-nose.git@7fd0132090256e752119f90a3d4568203c486f2e#egg=django_nose-dev
+selenium==2.25.0
+unittest2==0.5.1
+wsgiref==0.1.2
+nose==1.2.1
+coverage
+#django-generic-bookmarks

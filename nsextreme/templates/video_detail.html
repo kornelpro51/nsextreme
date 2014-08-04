@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}{{video.title}}{% endblock %}
+{% block head_additional %}
+    <!--<link href="{{ MEDIA_URL }}js/nv.d3.css" rel="stylesheet">-->
+    <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}js/flowplayer/skin/minimalist.css">
+
+    <script src="{{ MEDIA_URL }}js/d3.v3.min.js"></script>
+
+    <script src="{{ MEDIA_URL }}js/rgraph/RGraph.common.core.js"></script>
+    <script src="{{ MEDIA_URL }}js/rgraph/RGraph.common.dynamic.js"></script>
+    <script src="{{ MEDIA_URL }}js/rgraph/RGraph.common.tooltips.js"></script>
+    <script src="{{ MEDIA_URL }}js/rgraph/RGraph.line.js"></script>
+
+    <script src="{{ MEDIA_URL }}js/flowplayer/flowplayer.js"></script>
+    <script src="{{ MEDIA_URL }}js/gauge.js"></script>
+
+    <script src="{{ MEDIA_URL }}js/raphael.js"></script>
+    <script src="http://g.raphaeljs.com/g.raphael.js"></script>
+    <script src="http://g.raphaeljs.com/g.line.js"></script>
+
+    <!--<script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>-->
+    <script src="{{ MEDIA_URL }}js/highcharts/highcharts.js"></script>
+    <script src="{{ MEDIA_URL }}js/highcharts/modules/exporting.js"></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script src="http://openlayers.org/api/2.13.1/OpenLayers.js"></script>
+    <script>
+    {% autoescape off %}
+        var nse_data_raw = {{ video.data }};
+        //nse_data_raw = {frames: []}
+    {% endautoescape %}
+    </script>
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <style>
+    div.thumbnail {
+        width: 192px;
+        height: 110px;
+        margin-bottom: 20px;
+    }
+    div.thumbnail img{
+        width: 192px;
+        height: 108px;
+    }
+    #latest-videos {
+        border-left: 1px solid #E0DCDC;
+    }
+    </style>
+{% endblock %}
+
+{% block content %}
+<script type="text/javascript">
+    var VIDEOID = '{{ video.id }}';
+    var VIDEOURL = '{{ video.video.url }}';
+</script>
+<div class="row-fluid">
+    <div class="span5" id="video_info_area">
+        <h5>
+            {% if video.category_id == None %}
+                <a href="{% url 'explore' %}"> Explore </a>
+            {% else %}
+                <a href="{% url 'explore_c' categoryid=video.category_id %}">{{ video.category.title }}</a>
+            {% endif %}
+        </h5>
+        <h3>{{video.title|default_if_none:"" }}</h3>
+        <p>{{video.description|default_if_none:"" }}</p>
+        <div class="row-fluid">
+            <div class="span4 image_thumb">
+                {{ video.date_created|default_if_none:""}}
+                {% if video.user.profile.picture %}
+                    <img src="{{ MEDIA_URL }}{{ video.user.profile.picture }}" />
+                {% else %}
+                    <img src="{{ MEDIA_URL }}images/profile-default.jpg" />
+                {% endif %}
+            </div>
+            <div class="span8">
+                <div class="row-fluid">
+                    <div class="c-s-4">
+                        <h5 id="playing_distance">0ml</h5>
+                        <p>Distance</p>
+                    </div>
+                    <div class="c-s-4">
+                        <h5 id="playing_elevation">0ft</h5>
+                        <p id="playing_elevation_label">Elevation Loss</p>
+                    </div>
+                    <div class="c-s-4">
+                        <h5 id="playing_moving_time">00:00</h5>
+                        <p>Moving Time</p>
+                    </div>
+                </div>
+                <div>
+                    <h5><a href="{% url 'userprofile_detail' username=video.user.username %}">{{ video.user.display_name }}</a></h5>
+                    <p>{{ video.user.profile.title|default_if_none:""}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="span1" id="expand_icon">
+        <div><a class="btn btn-small btn-expand" data-expanded="False"><i class="icon icon-backward"></i></a></div>
+    </div>
+    <div class="span6" id="video_player_area">
+        <div class="flowplayer" data-swf="{{ MEDIA_URL }}js/flowplayer/flowplayer.swf"  style="display:block;width:362px;height:288px;">
+            <video>
+                <source type="video/mp4" src="{{ video.video.url }}">
+            </video>
+        </div>
+    </div>
+</div>
+<div class="tabbable activity_tab m-b-20">
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#detail-gauges" data-toggle="tab" >Gauges</a></li>
+        <li><a href="#detail-charts" data-toggle="tab">Charts</a></li>
+        <li><a href="#detail-map" data-toggle="tab">Map</a></li>
+    </ul>
+
+    <div class="tab-content">
+        <div id="detail-gauges" class="tab-pane active">
+            <div class="row-fluid">
+                <div class="span5">
+                    <h5 class="text-center">G forces</h5>
+                    <div>
+                        <div class="c-s-4">
+                            <h5 class="text-center">X</h5>
+                            <div id="g_force_x"></div>
+                        </div>
+                        <div class="c-s-4">
+                            <h5 class="text-center">Y</h5>
+                            <div id="g_force_y"></div>
+                        </div>
+                        <div class="c-s-4">
+                            <h5 class="text-center">Z</h5>
+                            <div id="g_force_z"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="span5">
+                    <div class="c-s-6">
+                        <h5 class="text-center">G-factor</h5>
+                        <div id="g_factor"></div>
+                    </div>
+                    <div class="c-s-6">
+                        <h5 class="text-center">Speed</h5>
+                        <div id="g_speed"></div>
+                    </div>
+                </div>
+                <div class="span2">
+                    <div></div>
+                </div>
+            </div>
+        </div>
+        <div id="detail-charts" class="tab-pane">
+            <div class="row-fluid">
+                <div class="span4">
+                    <h5 class="text-center">Elevation</h5>
+                    <div id="ch_elevation_d" style="min-width: 280px; height: 200px;"></div>
+                </div>
+                <div class="span4">
+                    <h5 class="text-center">G-factor</h5>
+                    <div id="ch_factor_d" style="min-width: 280px; height: 200px;"></div>
+                </div>
+                <div class="span4">
+                    <h5 class="text-center">Speed</h5>
+                    <div id="ch_speed_d" style="min-width: 280px; height: 200px;"></div>
+                </div>
+            </div>
+        </div>
+        <div id="detail-map" class="tab-pane">
+            <div id="map-canvas"></div>
+        </div>
+    </div>
+</div>
+<div class="row-fluid m-b-20 b-b-1-solid">
+    <div class="span5">
+        <div style="display: inline-block;position: relative;"><a data-toggle="modal" class="btn btn-primary btn-tiny" type="button" href="#shareEmailDialog">Email</a></div>
+        {% include "snippets/share.html" with page_url=video.get_absolute_url page_title=video.title %}
+    </div>
+    <div class="span2 clearfix">
+        <h4 class="pull-left m-r-10">{{ video.visits|intcomma }}</h4>
+        <span>TOTAL<br/>VIEWS</span>
+    </div>
+    <div class="span5">
+        {% if not user.is_authenticated %}
+        <a href="{% url 'registration_register' %}" class="btn btn-custom-1">JOIN</a>
+        {% endif %}
+    </div>
+</div>
+<div class="modal hide fade" id="shareEmailDialog">
+    <div class="modal-header">
+        <a href="#" class="close" data-dismiss="modal">&times;</a>
+        <h3>Share Video by Email</h3>
+    </div>
+    <div class="modal-body">
+        <div class="divDialogElements">
+            <h3>E-mail</h3>
+            <input class="xlarge" id="share-email-address" name="xlInput" type="text" >
+            <div  class="errors" style="color: red; display:none">
+                Missing
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal" onclick="closeDialog();">Cancel</a>
+        <a href="#" class="btn btn-primary" onclick="shareEmail();">OK</a>
+    </div>
+</div>
+{% if user.is_authenticated %}
+<div class="row-fluid m-b-20" >
+    <div class="span8">
+        <div class="row-fluid">
+            <div class="span5 text-center">
+                <h2>Comments</h2>
+                <p>What did you think of this?<br>Give your feedback here.</p>
+            </div>
+            <div class="comment-tab tabbable span7">
+                <div class="comment-form clearfix row-fluid m-b-20">
+                    {% csrf_token %}
+                    <input type="text" placeholder="Comment or message" class="span10 m-b-0" id="txt_create_comment">
+                    <input type="button" class="btn btn-primary btn-small span2" id="btn_create_comment" value="+">
+                </div>
+                <!-- comment -->
+                <ul class="nav nav-tabs m-b-0" id="myTab">
+                    <li class="active"><a href="#recent_comments" data-toggle="tab">Recent Comments</a></li>
+                    <li><a href="#top_comments" data-toggle="tab">Top Comments</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="recent_comments">
+                        {% include "comment_list.html" with comments=video.recentComments %}
+                    </div>
+                    <div class="tab-pane" id="top_comments">
+                        {% include "comment_list.html" with comments=video.topComments %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="span4">
+        <h2>Related activities</h2>
+        <ul class="thumbnails" id="latest-videos">
+        {% for latest in latest_videos %}
+            <li>
+                <div class="thumbnail">
+                    <a href="{{ latest.get_absolute_url }}">
+                    {% if latest.thumbnail %}
+                    <img src="{{ latest.thumbnail.url }}" width="192" height="108"/>
+                    {% else %}
+                    <img src="http://placehold.it/192x108" width="192" height="108" alt=""/>
+                    <!-- <img src="{{MEDIA_URL}}images/placeholder.gif" alt=""/> -->
+                    {% endif %}
+                    <h5>{{ latest.title }}</h5></a>
+                </div>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endif %}
+
+<script src="{{ MEDIA_URL }}js/video_page.js"></script>
+<script>
+//flowplayer("player", "/media/flowplayer/flowplayer-3.2.12.swf");
+</script>
+{% endblock %}
+
+

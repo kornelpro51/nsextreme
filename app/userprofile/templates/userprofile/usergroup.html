@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if user.is_school_admin %}
+    <h1>Professor</h1>
+{% else %}
+    <h1>School Admin</h1>
+{% endif %}
+<hr>
+<h2>Users List</h2>
+{% for usr in list_user %}
+    <p>{{ usr.user.display_name }}</p>
+{% endfor %}
+<hr>
+<div>
+    <form class="signup" id="signup_form" method="post" action="">
+    {% csrf_token %}
+    {{ form.as_p }}
+    {% if user.is_school_admin %}
+        <input type="submit" value ="Set as Professor">
+    {% else %}
+        <input type="submit" value ="Set as School Admin">
+    {% endif %}
+    </form>
+</div>
+{% endblock %}

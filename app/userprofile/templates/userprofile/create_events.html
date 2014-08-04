@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $('#id_event_date').datetimepicker({
+        format: 'mm-dd-yyyy'
+    });
+});
+</script>
+
+<h1>Create Event</h1>
+<form action="" method="post" enctype="multipart/form-data">
+{% csrf_token %}
+{{form.as_p}}
+<button type="submit" class="btn btn-primary">Save</button>
+</form>
+{% endblock %}

@@ -1,0 +1,547 @@
+@font-face {
+  font-family: 'Racing Sans One';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Racing Sans One'), local('RacingSansOne-Regular'), url(http://themes.googleusercontent.com/static/fonts/racingsansone/v2/1r3DpWaCiT7y3PD4KgkNyK3fkYX5z1QtDUdIWoaaD_k.woff) format('woff');
+}
+html {
+    height: 100%;
+}
+
+body{
+    height: 100%;
+
+}
+.wrapper {
+    height: 100%;
+    padding-top: 60px;
+    position: relative;
+    display:table;
+    width:100%;
+}
+#content {
+    display:table-row;
+}
+
+iframe {
+    border: none;
+}
+h2 {
+    color: #1b1a18;
+    font: 36px/35px 'Racing Sans One';
+}
+.banner>div img, .box-product ul li .image2 img, .product-grid ul li .image img, .cart-button a.button span, .box-product.box-subcat .image img, .related .box-product .image img, .compare-block .image img, .header-modules .banner > div > a .arr, .camera_wrap .camera_pag .camera_pag_ul li, ul.sf-menu > li > a, .sf-mega-section > li a, .sf-menu-phone li > a, #search .button-search i, header .links a, .toprow .header-button >div, .toprow .header-button>ul li >a, .toprow .header-button>ul li >span, .box-category > ul > li a, .banner .s-desc, .banner .s-desc:after, .cart a i, .wishlist a i, .compare a i, .cart a span, .wishlist a span, .compare a span, .compare-block .remove a i, #list_a i, #grid_a i, .name a {
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out;
+}
+.box-category ul {
+    list-style: none;
+    margin: 0;
+}
+.box-category > ul > li.active>a, .box-category > ul > li>a:hover, .box.man .box-content> ul > li.active>a, .box.man .box-content> ul > li>a:hover, .box.info .box-content> ul > li.active>a, .box.info .box-content> ul > li>a:hover {
+    color: #2185c5;
+    background-color: #dbe4ea;
+}
+.box-category > ul > li > a, .box.man .box-content> ul > li > a, .box.info .box-content> ul > li > a {
+    display: block;
+    font-weight: normal;
+    color: #ababab;
+    padding: 10px 15px 10px 15px;
+    color: #ababab;
+    background: #f6f6f6;
+    font-family: 'Open Sans',sans-serif;
+    line-height: 18px;
+    text-transform: uppercase;
+}
+/***************** Layout classes **********************/
+.m-b-5 {
+    margin-bottom: 5px;
+}
+.m-b-10 {
+    margin-bottom: 10px;
+}
+.m-b-20 {
+    margin-bottom: 20px;
+}
+.m-b-0 {
+    margin-bottom: 0 !important;
+}
+.m-r-10 {
+    margin-right: 10px;
+}
+.m-t--12 {
+    margin-top: -12px;
+}
+.row-fluid .c-s-4 {
+    width: 33%;
+    float: left;
+    margin-left: 0.33%;
+}
+.row-fluid .c-s-6 {
+    width: 50%;
+    float: left;
+}
+.b-b-1-solid {
+    border-bottom: 1px solid #E0DCDC;
+}
+/************** END Layout Classes ****************/
+
+/************** Text Classes ****************/
+.text-center {
+    text-align: center;
+}
+.text-uppercase {
+    text-transform: uppercase;
+}
+.relative {
+    position: relative;
+}
+/************** END Text Classes ****************/
+
+/************** Image Classes ****************/
+
+.image_thumb img{
+    width: 100px;
+    height: 100px;
+}
+
+.image_s img {
+    width: 200px;
+    height: 200px;
+}
+.image_m img{
+
+}
+.image_l img{
+
+}
+/************** END Image Classes ****************/
+
+/***************** Button Classes ******************/
+.btn-custom-1 {
+    margin: 0 2px 2px 0;
+    box-shadow: 2px 2px 0px #000;
+    border: 2px solid #000;
+    background-image: none;
+    background-color: #AA2222;
+    font-weight: bold;
+    text-shadow: none;
+    color: white;
+    font-size: 20px;
+}
+.btn-custom-1:hover, .btn-custom-1:focus {
+    background-color: #BB3333;
+    color: white;
+}
+.btn-custom-1:active {
+    margin: 2px 0 0 2px;
+    background-color: #BB3333;
+    color: white;
+}
+
+.btn-custom-2 {
+    margin: 0 2px 2px 0;
+    box-shadow: 2px 2px 0px #000;
+    border: 2px solid #000;
+    background-image: none;
+    background-color: #AA2222;
+    font-weight: bold;
+    text-shadow: none;
+    color: white;
+}
+.btn-custom-2:hover, .btn-custom-2:focus {
+    background-color: #BB3333;
+    color: white;
+}
+.btn-custom-2:active {
+    margin: 2px 0 0 2px;
+    background-color: #BB3333;
+    color: white;
+}
+.btn-custom-2.disabled, .btn-custom-2[disabled] {
+    cursor: default;
+    background-image: none;
+    background-color: #888;
+    opacity: 0.65;
+    filter: alpha(opacity=65);
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    margin: 0 2px 2px 0;
+    color: #333333;
+}
+.btn-tiny {
+    line-height: 12px;
+    font-size: 11px;
+    font-weight: bold;
+    display: inline-block;
+}
+/***************** END Button Classes ******************/
+
+/************** Widget Classes ***************/
+.widget {
+    padding: 6px 6px;
+    border: 1px #AAA solid;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+.widget ul {
+    list-style: none;
+}
+.widget-video {
+    background-color: #222;
+    padding: 8px;
+    margin: 2px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 3px;
+}
+.widget-video h4, .widget-video p, .widget-video span {
+    color: #EEE;
+}
+.widget-video a {
+    text-shadow: none;
+}
+.widget-video .video-area {
+    width: 100%;
+    height: 150px;
+}
+.widget-video .video-area img {
+    height: 150px;
+}
+.widget-video .thumb-comment-tab ul{
+    list-style: none;
+    margin: 0;
+}
+
+/************** END Widget ***************/
+
+/*************** Overwrite bootstrap **********************/
+.fullcontrol textarea, .fullcontrol input[type="text"], .fullcontrol input[type="password"], .fullcontrol input[type="datetime"], .fullcontrol input[type="datetime-local"], .fullcontrol input[type="date"], .fullcontrol input[type="month"], .fullcontrol input[type="time"], .fullcontrol input[type="week"], .fullcontrol input[type="number"], .fullcontrol input[type="email"], .fullcontrol input[type="url"], .fullcontrol input[type="search"], .fullcontrol input[type="tel"], .fullcontrol input[type="color"], .fullcontrol .uneditable-input {
+    -webkit-box-sizing:border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    min-height: 28px;
+    width: 100%;
+
+}
+/************************************/
+
+/****************** Start Overlay ***********************/
+@-moz-keyframes loadingStart {
+ 0% {
+ opacity: 0;
+}
+ 100% {
+ opacity: 1;
+}
+}
+@-webkit-keyframes loadingStart {
+ 0% {
+ opacity: 0;
+}
+ 100% {
+ opacity: 1;
+}
+}
+@-o-keyframes loadingStart {
+ 0% {
+ opacity: 0;
+}
+ 100% {
+ opacity: 1;
+}
+}
+@keyframes loadingStart {
+ 0% {
+ opacity: 0;
+}
+ 100% {
+ opacity: 1;
+}
+}
+.loading_overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    -webkit-animation: loadingStart 3s 300ms linear 1 both;
+    -moz-animation: loadingStart 3s 300ms linear 1 both;
+    -o-animation: loadingStart 3s 300ms linear 1 both;
+    animation: loadingStart 3s 300ms linear 1 both;
+    background: rgba(0, 0, 0, 0.8);
+    text-align: center;
+    z-index: 9999;
+    display: none;
+}
+/****************** End Overlay **********************/
+
+/**************** Top Menu *****************/
+.form-tiny-login {
+    margin-bottom: 0;
+    font-size: 12px;
+}
+.form-tiny-login button{
+    margin-top: 5px;
+}
+.form-tiny-login input{
+    padding: 2px 7px;
+    margin-top: 5px;
+    width: 120px;
+}
+/**************** END Top Menu *****************/
+
+/***************** Registration Classes *********************/
+
+body.body_registration {
+}
+.body_registration #content{
+    background-image: url('images/signup_bg.jpg');
+    background-size: cover;
+}
+.body_registration footer {
+    margin-top: 0;
+}
+.body_registration .wrapper{
+    padding-top: 41px;
+}
+.registration_block {
+    width: 400px;
+    margin: 40px auto;
+    padding: 15px;
+    background-color: rgba(255,255,255,0.7);
+    border: 2px solid black;
+}
+.registration_block h1 {
+    text-align: center;
+}
+
+.registration_block input[type="text"], .registration_block input[type="password"]{
+    margin-bottom: 10px;
+    width: 386px;
+}
+.registration_block .errors {
+    color: #CC3434;
+}
+.registration_block .errors + input {
+    border-color: #CC3434;
+}
+/***************** End Registration Classes *********************/
+
+/********* Footer Classes **********/
+footer {
+    width: 100%;
+    background-color: #000;
+    display:table-row;
+    height: 60px;
+}
+footer > ul{
+    padding-top: 20px;
+    padding-bottom: 20px;
+    list-style: none;
+    display: block;
+    text-align: center;
+    margin: 0;
+}
+footer > ul > li {
+    display: inline-block;
+}
+footer > ul > li:after {
+    content: "\00a0|\00a0"
+}
+footer > ul > li:last-child:after {
+    content: ""
+}
+/********* END Footer Classes **********/
+
+/*************** Home Page *****************/
+.home-slider h1{
+    position: absolute;
+    top : 30px;
+    left: 80px;
+    text-shadow: 2px 0 0 #fff, -2px 0 0 #fff, 0 2px 0 #fff, 0 -2px 0 #fff, 1px 1px #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff;
+    filter: progid:DXImageTransform.Microsoft.Glow(Color=#ffffff,Strength=3); /* IE<10 */;
+}
+.home-slider .btn-register {
+    position: absolute;
+    left: 120px;
+    top: 150px;
+}
+.home-slider .btn-features {
+    position: absolute;
+    left: 50%;
+    display: block;
+    width: 120px;
+    margin-left: -60px;
+    top: 320px;
+}
+.home-slider .btn-testimonials {
+    position: absolute;
+    left: 650px;
+    top: 320px;
+}
+
+#mainCarousel .item_carousel_1 {
+    background-image: url( 'images/race-1.jpg' );
+    background-size: 100%;
+    width: 100%;
+    height: 400px;
+}
+#mainCarousel .item_carousel_2 {
+    background-image: url( 'images/race-2.jpg' );
+    background-size: 100%;
+    width: 100%;
+    height: 400px;
+}
+#mainCarousel .item_carousel_3 {
+    background-image: url( 'images/race-3.jpg' );
+    background-size: 100%;
+    width: 100%;
+    height: 400px;
+}
+#howitworks {
+    padding-bottom: 20px;
+}
+.how_it_works {
+    background-color: #DCEFFE;
+    border: 1px solid #01A0E1;
+    padding: 2px;
+}
+.how_it_works > div {
+    background-color: #AADDFF;
+    -webkit-box-shadow: inset 0px 0px 68px 10px rgba(86, 189, 234, 1);
+    -moz-box-shadow: inset 0px 0px 68px 10px rgba(86, 189, 234, 1);
+    box-shadow: inset 0px 0px 68px 10px rgba(86, 189, 234, 1);
+}
+.how_it_works .step {
+    background-color: white;
+    width: 22px;
+    font-size: 20px;
+    border-radius: 10px;
+    margin: 10px auto;
+    line-height: 22px;
+    font-weight: bold;
+    color: #00A3E8;
+}
+.how_it_works h3 {
+    color: #00A3E8;
+}
+.how_it_works .lbl {
+    color: #00A3E8;
+    font-weight: bold;
+}
+/***************** END Home page ********************/
+
+/***************** Explorer page ********************/
+.comment input{
+    margin: 0;
+}
+/***************** End Explorer page ********************/
+
+
+/*************** Video play page *************/
+.activity_tab {
+}
+.activity_tab .nav-tabs{
+    margin-bottom: 0;
+}
+.activity_tab .tab-content{
+    border-left: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+.activity_tab .tab-pane {
+    margin-bottom: 20px;
+}
+.activity_tab #map-canvas {
+    width: 800px;
+    height: 400px;
+    margin: 0 auto;
+}
+
+.comment-tab .tab-content{
+    border-left: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    min-height: 300px;
+}
+.comment-tab .tab-pane {
+    padding: 15px;
+}
+.comment-tab .tab-pane ul {
+    list-style: none;
+    margin: 0;
+}
+.comment-tab .tab-pane ul span{
+    padding: 4px 12px;
+}
+
+#expand_icon {
+    display:table !important;
+    height:300px;
+}
+
+#expand_icon > div {
+    display:table-cell;
+    vertical-align:middle;
+    text-align:center;
+}
+/**************** End Video play page *************************/
+
+
+
+.gyroscope_gauge .background {
+  fill: #ccc;
+}
+.gyroscope_gauge .foreground {
+  fill: #F88;
+}
+.gyroscope_gauge text {
+  fill: #ccc;
+}
+
+.gforce_gauge .bar {
+  fill: #FB3;
+  shape-rendering:crispEdges;
+}
+.gforce_gauge .line {
+  stroke: #F90;
+  shape-rendering:crispEdges;
+}
+.gforce_gauge text {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  fill: #333;
+}
+
+
+.speed_gauge .background {
+  fill: #ddd;
+}
+.speed_gauge .foreground {
+  fill: #FB3;
+}
+
+.speed_gauge .text1 {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+  fill: #333;
+}
+.speed_gauge .text2 {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  fill: #333;
+}
+.speed_gauge .text3 {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 10px;
+  fill: #333;
+}

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <form action="/api/v1/upload_video" method="POST" enctype="multipart/form-data">
+        <div>
+            <label>Title : </label>
+            <input type="text" name="title" id="title" />
+        </div>
+        <div>
+            <label>Data File : </label>
+            <input type="file" name="data" id="data" />
+        </div>
+        <div>
+            <label>Video File : </label>
+            <input type="file" name="video" id="video" />
+        </div>
+        <div>
+            <label>username : </label>
+            <input type="text" name="username" id="username" />
+        </div>
+        <div>
+            <label>password : </label>
+            <input type="text" name="password" id="password" />
+        </div>
+        <button type="submit">Upload</button>
+    </form>
+</body>
+</html>

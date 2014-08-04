@@ -1,0 +1,14 @@
+<ul>
+    {% for comment in comments %}
+    <li>
+        <a class="btn btn-link" href="{{ comment.created_by.id }}">{{ comment.created_by.display_name }}</a>
+        <span>{{ comment.created_at|date:"j M"}}</span>
+
+        <a class="btn btn-link btn-small pull-right unlike" href="{{ comment.id }}"><i class="e-icon-thumbs-up2"></i>&nbsp;</a>
+        <span class="pull-right c_recommend_{{ comment.id }}">{{ comment.recommend }}</span>
+        <a class="btn btn-link btn-small pull-right like" href="{{ comment.id }}"><i class="e-icon-thumbs-up"></i>&nbsp;</a>
+
+        <pre>{{ comment.content }}</pre>
+    </li>
+    {% endfor %}
+</ul>

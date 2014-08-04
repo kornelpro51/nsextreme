@@ -1,0 +1,13 @@
+{% extends "registration/base.html" %}
+
+{% block title %}Registration complete{% endblock %}
+
+{% block content %}
+    <h1>Thank you for registering!</h1>
+    <p>You will receive a confirmation email shortly. Follow the instructions in your email to activate your account. If you still need assistance, Please contact NS Extreme Support at contact@nsextreme.com</p>
+    <div class="text-center">
+        <a class="btn btn-custom-1" href="{% url 'auth_login' %}">Continue</a>
+        <br/>
+        <a class="btn btn-link" href="{% url 'nsextreme_reg_activate' %}">Send confirmation again</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+
+
+
+<h1>Status Page</h1>
+<br>
+<br>
+
+{% for statuses in status %}
+<div>
+        <h2>{{statuses.title}}</h2>
+        <br>
+        <p>{{statuses.image}}</p>
+</div>
+
+{% endfor %}
+
+
+
+
+
+
+
+
+{% endblock %}

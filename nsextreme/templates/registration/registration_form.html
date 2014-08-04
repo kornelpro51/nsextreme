@@ -1,0 +1,75 @@
+{% extends "registration/base.html" %}
+
+{% block head_additional %}
+    <link href="{{ STATIC_URL }}django_facebook/css/facebook.css"
+{% endblock %}
+
+{% block title %}Sign up{% endblock %}
+
+{% block content %}
+    {% include 'django_facebook/_facebook_js.html' %}
+    {% if form.errors %}
+    <p class="errors">Please correct the errors below: {{ form.non_field_errors }}</p>
+    {% endif %}
+    <h3 class="text-uppercase">Sign up today, It's free</h3>
+    <form action="{% url 'facebook_connect' %}?facebook_login=1" method="post">
+        <input type="hidden" value="{{ request.path }}" name="next" />
+        <input type="hidden" value="{{ request.path }}" name="register_next" />
+        <input type="hidden" value="{{ request.path }}" name="error_next" />
+        {% csrf_token %}
+        <input onclick="F.connect(this.parentNode); return false;" type="image" src="{{ STATIC_URL }}django_facebook/images/facebook_login.png" />
+    </form>
+    <h3>Or, you can complete</h3>
+    <form method="post" action="" class="wide">
+    {% csrf_token %}
+    {% comment %}
+    <p>
+        <label for="id_username">Username:</label>
+        {% if form.username.errors %}
+        <p class="errors">{{ form.username.errors.as_text }}</p>
+        {% endif %}
+        {{ form.username }}
+    </p>
+    {% endcomment %}
+    <p>
+        <label for="id_email">Email address(activation email will be sent)</label>
+        {% if form.email.errors %}
+        <p class="errors">{{ form.email.errors.as_text }}</p>
+        {% endif %}
+        {{ form.email }}
+    </p>
+    <p>
+        <label for="id_password1">Choose password</label>
+        {% if form.password1.errors %}
+        <p class="errors">{{ form.password1.errors.as_text }}</p>
+        {% endif %}
+        {{ form.password1 }}
+    </p>
+    <p>
+        <label for="id_password2">Confirm password</label>
+        {% if form.password2.errors %}
+        <p class="errors">{{ form.password2.errors.as_text }}</p>
+        {% endif %}
+        {{ form.password2 }}
+    </p>
+    <pre>At this time NSExtreme is only available in the US and you must be 18 years old or older.</pre>
+    <div class="form-inline m-b-10">
+        <label class="checkbox m-r-10"><input type="checkbox" id="chk_live_in_us">I live in US</label>
+        <label class="checkbox"><input type="checkbox" id="chk_older">I am 18 or older</label>
+    </div>
+    <pre>By registering you confirm that you agree with<br/> NS Extreme's <a href="{% url 'terms_conditions' %}">Terms & Conditions</a></pre>
+    <div class="text-center"><input type="submit" class="btn btn-custom-2" id="btn_create_account" value="Create Account" disabled="disabled"></div>
+    </form>
+    <script>
+        $(".form-inline input[type='checkbox']").change(function(){
+            if($("#chk_older").is(':checked') && $("#chk_live_in_us").is(':checked')) {
+                $("#btn_create_account").removeAttr('disabled');
+            } else {
+                $("#btn_create_account").attr('disabled','disabled');
+            }
+        });
+    </script>
+{% endblock %}
+
+{% block content-related %}
+{% endblock %}

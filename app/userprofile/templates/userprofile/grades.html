@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% regroup assignments by assignment.course.name as assignment_list %}
+
+
+    {% for assignment in assignment_list %}
+    <h3>Course: {{ assignment.grouper }}</h3>
+
+    {% regroup assignment.list by assignment.name as course_grade_list %}
+    <table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Assignment</th>
+            <th>Grade</th>
+            <th>Professor comment</th>
+        </tr>
+    </thead>
+    <tbody>
+
+    {% for course_grade in course_grade_list %}
+    <tr>
+        <td colspan="3">{{ course_grade.grouper }}</td>
+    </tr>
+    
+    {% for grade in course_grade.list %}
+    <tr>
+        <td>&nbsp;</td>
+        <td>{% if grade.grade %}{{ grade.grade }}{% else %}No grades yet{% endif %}</td>
+        <td>Comment: {{ grade.comment|safe }}</td>
+    </tr>
+    {% endfor %}
+
+    {% endfor %}
+    </tbody>
+
+{% endfor %}
+</table>
+{% endblock %}

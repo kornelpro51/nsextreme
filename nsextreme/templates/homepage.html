@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="home-slider relative">
+    <div id="mainCarousel" class="carousel slide" data-interval="0">
+        <ol class="carousel-indicators">
+            <li data-target="#mainCarousel" data-slide-to="0" class="active"></li>
+            <li data-target="#mainCarousel" data-slide-to="1"></li>
+            <li data-target="#mainCarousel" data-slide-to="2"></li>
+        </ol>
+        <!-- Carousel items -->
+        <div class="carousel-inner">
+            <div class="active item"><div class="item_carousel_1"></div></div>
+            <div class="item"><div class="item_carousel_2"></div></div>
+            <div class="item"><div class="item_carousel_3"></div></div>
+        </div>
+        <!-- Carousel nav -->
+        <a class="carousel-control left" href="#mainCarousel" data-slide="prev">&lsaquo;</a>
+        <a class="carousel-control right" href="#mainCarousel" data-slide="next">&rsaquo;</a>
+    </div>
+    <h1>Insane? Sick? Gnarly? Fast?<br/>Are you ready to join the fun?</h1>
+    {% if not user.is_authenticated %}
+    <a class="btn btn-custom-1 btn-register" href="{% url 'registration_register' %}">Register now for free</a>
+    {% endif %}
+    <a class="btn btn-custom-2 btn-features" href="#howitworks">How it works?</a>
+    <!--<a class="btn btn-custom-2 btn-testimonials" href="{% url 'testimonials' %}">Testimonials</a>-->
+</div>
+<div>
+    <p>
+        Our advanced data capture and analysis engine takes your video, GPS, gyroscope and accelerometer data to give you the maximum insight.
+        Capture, share and learn from your greatest rides, tricks and performances ever.
+    </p>
+</div>
+<div id="howitworks">
+    <h2>How it works?</h2>
+    <div class="how_it_works">
+        <div class="row-fluid">
+            <div class="span4">
+                <div class="text-center step">1</div>
+                <h3 class="text-center">GET YOUR DEVICE</h3>
+                <div class="row-fluid m-b-20">
+                    <div class="span2"></div>
+                    <div class="span8 lbl">Get a case for your mobile device</div>
+                    <div class="span2"></div>
+                </div>
+            </div>
+            <div class="span4">
+                <div class="text-center step">2</div>
+                <h3 class="text-center">DOWNLOAD OUR APP</h3>
+                <div class="row-fluid m-b-20">
+                    <div class="span2"></div>
+                    <div class="span8 lbl">Get the mobile app to record and upload the video and gyroscope and accelermeter data.</div>
+                    <div class="span2"></div>
+                </div>
+            </div>
+            <div class="span4">
+                <div class="text-center step">3</div>
+                <h3 class="text-center">WATCH YOURSELF</h3>
+                <div class="row-fluid m-b-20">
+                    <div class="span2"></div>
+                    <div class="span8 lbl">Get the low down on all your ride stats & tricks. Compare your performance to others.</div>
+                    <div class="span2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span4"></div>
+        <div class="span4 text-center">
+            <h2>Watch the video</h2>
+            <div class="m-b-20">
+                <iframe width="100%" src="http://www.youtube.com/embed/dJlBhnQj-M8"></iframe>
+            </div>
+            {% if not user.is_authenticated %}
+            <a class="btn btn-custom-1" href="{% url 'registration_register' %}">Register for now free</a>
+            {% endif %}
+        </div>
+        <div class="span4"></div>
+    </div>
+    <script>
+        jQuery('a.btn-features').click(function(e) {
+            e.preventDefault();
+            jQuery('html,body').animate({ scrollTop: jQuery(this.hash).offset().top - 41}, 500);
+            return false;
+        });
+    </script>
+</div>
+{% endblock %}
+

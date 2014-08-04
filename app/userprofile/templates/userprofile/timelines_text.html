@@ -1,0 +1,22 @@
+{% load comments %}
+<div class="timeline">
+    <p>
+        <a href="{{ timeline.created_by.get_absolute_url }}">
+            <img src="{{ timeline.created_by.profile.get_small_picture }}" width="25" height="25" alt="{{ timeline.created_by.display_name }}">
+        </a>
+        <a href="{{ timeline.created_by.get_absolute_url }}">{{ timeline.created_by.display_name }}</a> wrote 
+        <strong>{{ timeline.title }}</strong> 
+        {% if timeline.content_object != request.user.profile %}on <a href="{{ timeline.content_object.get_absolute_url}}">{{ timeline.content_object }}</a>{% endif %}
+        <small> {{ timeline.created_at|timesince }} ago</small>
+    </p>
+    <div>{{ timeline.get_content.content|safe }}</div>
+
+    {% get_comment_count for timeline as comment_count %}
+    <div class="timeline-info">
+        <p><a href="#" class="comments-list"><small><i class="icon-comment"></i> {{ comment_count}} comment(s)</small></a></p>
+    </div>
+    <div class="comments">
+        {% render_comment_list for timeline %}
+        {% render_comment_form for timeline %}
+    </div>
+</div>

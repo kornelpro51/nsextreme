@@ -1,0 +1,363 @@
+{% extends "base.html" %}
+{% block title %}{{video.title}}{% endblock %}
+{% block head_additional %}
+		<script src="/media/flowplayer/flowplayer-3.2.11.min.js"></script>
+		<script src="/media/jsgauge/gauge.js"></script>
+		<script src="http://cdn.jquerytools.org/1.2.7/full/jquery.tools.min.js"></script>
+		<script src="/media/jquery.sparkline.min.js"></script>
+		<script>
+		{% autoescape off %}
+			//nse_data_raw = {{ video.data }};
+            nse_data_raw = {frames: []}
+		{% endautoescape %}
+		</script>
+	    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+	    <!--[if lt IE 9]>
+	    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+	    <![endif]-->
+        <style>
+	    .readout-label {
+	    	display: inline-block;
+	    	width: 70px;
+	    	margin-left: 20px;
+	    	color: gray;
+	    	font-size: 11px;
+	    }
+	    .readout-data {
+	    	display: inline-block;
+	    	width: 50px;
+	    	text-align: right;
+	    	font-size: 10px;
+	    }
+	    #gauges {
+	    	margin-left: 20px;
+	    }
+	    #spark-velocity canvas {
+	    	vertical-align: bottom !important;
+	    }
+
+	    div.thumbnail {
+	    	width: 192px;
+	    	height: 110px;
+	    	margin-bottom: 20px;
+	    }
+
+	    #latest-videos {
+	    	overflow: scroll;
+	    	height: 400px;
+	    }
+	    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+	<h1>{{video.title}}</h1>
+	</div>
+	<div class="row">
+			<span class="span8" style="margin-left:0">
+			<a href="{{ video.video.url }}" style="display:block;width:640px;height:360px;"
+   		 id="player"></a>
+			</span>
+			<span class="span4">
+				<div id="gauges">
+					<div>
+						<div class="vertical-align: bottom;">
+							<canvas id="gauge-velocity" width="100" height="100">[No canvas support]</canvas>
+		                    <!-- <span id="spark-velocity">Loading..</span> -->
+
+						</div>
+						<span class="readout-label">Gyro</span>
+						<table>
+							<tr><td>
+					    		<canvas id="meter_gyro_x" style="display:inline" width="100" height="100">[No canvas support]</canvas>
+					    	</td><td>
+					    	<canvas id="meter_gyro_y" style="display:inline" width="100" height="100">[No canvas support]</canvas>
+					    	</td><td>
+					    	<canvas id="meter_gyro_z" style="display:inline" width="100" height="100">[No canvas support]</canvas>
+					    	</td></tr>
+						</table>
+					</div>
+					<div>
+						<span class="readout-label">Accelerometer</span>
+						<table>
+							<tr><td>
+					    		<canvas id="meter_accel_x" style="display:inline" width="100" height="100">[No canvas support]</canvas>
+					    	</td><td>
+					    	<canvas id="meter_accel_y" style="display:inline" width="100" height="100">[No canvas support]</canvas>
+					    	</td><td>
+					    	<canvas id="meter_accel_z" style="display:inline" width="100" height="100">[No canvas support]</canvas>
+					    	</td></tr>
+						</table>
+					</div>
+					<div>
+						<span class="readout-label" style="width:50px !important;">Longitude</span>
+						<span class="readout-data" id="data-longitude">0</span>
+						<span class="readout-label" style="width:50px !important;">Latitude</span>
+						<span class="readout-data" id="data-latitude">0</span>
+					</div>
+				</div>
+			</span>
+		</div>
+		<div class="row">
+			<h2>Share</h2>
+			<p>
+				<a data-toggle="modal" class="btn btn-primary" type="button" href="#shareEmailDialog">Email</a>
+				<a class="btn" type="button" disabled href="#">Twitter</a>
+				<a class="btn" type="button" disabled href="#">Facebook</a>
+				<a class="btn" type="button" disabled href="#">Youtube</a>
+			</p>
+		</div>
+		<!-- relevant dialogs -->
+		<script>
+		// using jQuery
+		function getCookie(name) {
+		    var cookieValue = null;
+		    if (document.cookie && document.cookie != '') {
+		        var cookies = document.cookie.split(';');
+		        for (var i = 0; i < cookies.length; i++) {
+		            var cookie = jQuery.trim(cookies[i]);
+		            // Does this cookie string begin with the name we want?
+		            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+		                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+		                break;
+		            }
+		        }
+		    }
+		    return cookieValue;
+		}
+		var csrftoken = getCookie('csrftoken');
+		function csrfSafeMethod(method) {
+		    // these HTTP methods do not require CSRF protection
+		    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+		}
+		$.ajaxSetup({
+		    crossDomain: false, // obviates need for sameOrigin test
+		    beforeSend: function(xhr, settings) {
+		        if (!csrfSafeMethod(settings.type)) {
+		            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+		        }
+		    }
+		});
+
+		function shareEmail() {
+			var email = document.getElementById("share-email-address").value;
+			// submit to server
+			var jqxhr = $.post('{{ video.get_absolute_url }}/share_via_email', { email: email }, function(data) {
+				if (data.errors) {
+					$("div.errors").empty().append(data.errors);
+					$("div.errors").show();
+				} else {
+					closeDialog();
+				}
+			});
+			jqxhr.error(function(jqXHR, status, thrownError) {
+				$("div.errors").empty().append(thrownError);
+				$("div.errors").show();
+			});
+		}
+		function closeDialog () {
+			$("div.errors").empty().append('none').hide();
+			document.getElementById("share-email-address").value = '';
+			$('#shareEmailDialog').modal('hide');
+		}
+		</script>
+		<div class="modal hide fade" id="shareEmailDialog">
+			<div class="modal-header">
+				<a href="#" class="close" data-dismiss="modal">&times;</a>
+				<h3>Share Video by Email</h3>
+			</div>
+			<div class="modal-body">
+				<div class="divDialogElements">
+					<h3>E-mail</h2>
+					<input class="xlarge" id="share-email-address" name="xlInput" type="text" />
+					<div  class="errors" style="color: red; display:none">
+						Missing
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<a href="#" class="btn" data-dismiss="modal" onclick="closeDialog();">Cancel</a>
+				<a href="#" class="btn btn-primary" onclick="shareEmail();">OK</a>
+			</div>
+		</div>
+
+		<div class="row" >
+				<h2>Latest Videos</h2>
+<ul class="thumbnails" id="latest-videos">
+ 	{% for latest in latest_videos %}
+	<li class="span3">
+		<div class="thumbnail">
+			<a href="{{ latest.get_absolute_url }}">
+				{% if latest.thumbnail %}
+				<img src="{{ latest.thumbnail.url }}" width="192" height="108"/>
+				{% else %}
+				<img src="http://placehold.it/192x108" width="192" height="108" alt=""/>
+				<!-- <img src="{{MEDIA_URL}}images/placeholder.gif" alt=""/> -->
+				{% endif %}
+				<h5>{{ latest.title }}</h5></a>
+			</div>
+		</li>
+	 {% endfor %}
+ 	</ul>
+	</div>
+	</div>
+	</div>
+		<script>
+		    $(document).ready(function ()
+		    {
+		    	var options;
+
+		    	// Draw the gauge using default settings
+		    	// Draw the gauge using custom settings
+		    	options = {
+		    		value: 0,
+		    		label: 'Speed',
+		    		unitsLabel: 'm/s',
+		    		min: 0,
+		    		max: 100,
+		    		majorTicks: 10,
+		    		minorTicks: 5, // small ticks inside each major tick
+		    	};
+
+		    	gauge_velocity = new Gauge(document.getElementById('gauge-velocity'), options);
+
+		    	options = {
+		    		value: 0,
+		    		unitsLabel: 'rad/s',
+		    		min: -6.28,
+		    		max: 6.28,
+		    		majorTicks: 12,
+		    		minorTicks: 5, // small ticks inside each major tick
+		    	};
+
+		    	meter_gyro_x = new Gauge(document.getElementById('meter_gyro_x'), options);
+		    	meter_gyro_y = new Gauge(document.getElementById('meter_gyro_y'), options);
+		    	meter_gyro_z = new Gauge(document.getElementById('meter_gyro_z'), options);
+
+		    	options = {
+		    		value: 0,
+		    		unitsLabel: 'G',
+		    		min: -2.5,
+		    		max: 2.5,
+		    		majorTicks: 12,
+		    		minorTicks: 5, // small ticks inside each major tick
+		    	};
+
+		    	meter_accel_x = new Gauge(document.getElementById('meter_accel_x'), options);
+		    	meter_accel_y = new Gauge(document.getElementById('meter_accel_y'), options);
+		    	meter_accel_z = new Gauge(document.getElementById('meter_accel_z'), options);
+
+		    });
+
+		    function updateData(id, value) {
+		    	$(id).html(value);
+		    }
+
+		    // find the correct requestAnimationFrame for the browser
+		    (function() {
+		        var lastTime = 0;
+		        var vendors = ['ms', 'moz', 'webkit', 'o'];
+		        for(var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+		            window.requestAnimationFrame = window[vendors[x]+'RequestAnimationFrame'];
+		            window.cancelAnimationFrame = 
+		              window[vendors[x]+'CancelAnimationFrame'] || window[vendors[x]+'CancelRequestAnimationFrame'];
+		        }
+		     
+		        if (!window.requestAnimationFrame)
+		            window.requestAnimationFrame = function(callback, element) {
+		                var currTime = new Date().getTime();
+		                var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+		                var id = window.setTimeout(function() { callback(currTime + timeToCall); }, 
+		                  timeToCall);
+		                lastTime = currTime + timeToCall;
+		                return id;
+		            };
+		     
+		        if (!window.cancelAnimationFrame)
+		            window.cancelAnimationFrame = function(id) {
+		                clearTimeout(id);
+		            };
+		    }());
+
+			var data_index = 0;
+			var last_cuepoint = 0;
+		    function gauge_update() {
+		    	var PLAYING = 3;
+		    	if (flowplayer().getState() != PLAYING)
+		    		return;
+		    	var cuepoint = $f().getTime();
+		    	var frames = nse_data_raw['frames'];
+		    	// did the user go backwards in time? re-sync the data_index
+		    	// by starting from 0
+		    	if (cuepoint < last_cuepoint) {
+			    	// TODO: use a binary search to find the most efficient spot
+			    	// to start
+		    		data_index = 0;
+		    	}
+		    	// are we out of data?
+		    	if (data_index == frames.length - 1)
+		    		return
+		    	last_cuepoint = cuepoint;
+		    	// depending on how long its been since our last update we may
+		    	// have to jump forward a couple frames
+		    	var need_repaint = false;
+	    		while (frames[data_index + 1].time < cuepoint) {
+		    		need_repaint = true;
+	    			data_index++;
+	    			// exit early if we ran out of data
+	    			if (data_index + 1 == frames.length)
+	    				return
+	    		}
+		    	if (need_repaint) {
+			    	var data = frames[data_index];
+		    		updateData("#data-longitude", data.location.longitude);
+		    		updateData("#data-latitude", data.location.latitude);
+		    		// TODO: properly handle velocity
+		    		if (Math.abs(data.velocity) != 0)
+			    		gauge_velocity.setValue(Math.abs(data.velocity));
+		    		meter_gyro_x.setValue(data.gyroscope.x);
+		    		meter_gyro_y.setValue(data.gyroscope.y);
+		    		meter_gyro_z.setValue(data.gyroscope.z);
+		    		meter_accel_x.setValue(data.accelerometer.x);
+		    		meter_accel_y.setValue(data.accelerometer.y);
+		    		meter_accel_z.setValue(data.accelerometer.z);
+		    		spark_update();
+		    	}
+		    };
+
+		    var velocity_history = [];
+		    var velocity_history_max = 30;
+		    var velocity_last_update = 0;
+		   	function spark_update(data) {
+		   		// commented out for now
+		   		return;
+			    // timenow = Date.now();
+
+			    // if (timenow - velocity_last_update > refreshinterval) {
+			    data = nse_data_raw['frames'][data_index];
+			    console.log(data.velocity);
+			    if (Math.abs(data.velocity))
+				    velocity_history.push(Math.abs(data.velocity));
+				if (velocity_history.length > velocity_history_max)
+					velocity_history.splice(0,1);
+				$("#spark-velocity").sparkline(velocity_history, {height: 50, width: velocity_history.length*5, toolTipSuffix: ' m/s'});
+				   // 	velocity_last_update = timenow;
+			   	// }
+			}
+
+		    function animate_update() {
+			    requestAnimationFrame(animate_update);
+		    	gauge_update();
+		    }
+
+		    requestAnimationFrame(animate_update);
+
+
+		</script>
+		<script>
+		  flowplayer("player", "/media/flowplayer/flowplayer-3.2.12.swf");
+		</script>
+{% endblock %}
+</html>
+
+
